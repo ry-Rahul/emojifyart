@@ -29,7 +29,11 @@ export default function Home() {
       <main className="flex-1 w-full mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="space-y-8">
           {/* Top Advertisement Banner */}
-          <AdBanner position="top" />
+          <div className="rounded-xl bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-[1px]">
+            <div className="rounded-xl bg-white">
+              <AdBanner position="top" />
+            </div>
+          </div>
 
           {/* Image Upload Section */}
           <div className="space-y-4">
@@ -48,7 +52,13 @@ export default function Home() {
           </div>
 
           {/* Middle Advertisement Banner */}
-          {state.previewImage && <AdBanner position="middle" />}
+          {state.previewImage && (
+            <div className="rounded-xl bg-gradient-to-r from-fuchsia-50 via-sky-50 to-amber-50 p-[1px]">
+              <div className="rounded-xl bg-white">
+                <AdBanner position="middle" />
+              </div>
+            </div>
+          )}
 
           {/* Emoji Controls Section */}
           {state.previewImage && (
@@ -66,8 +76,10 @@ export default function Home() {
           {state.mosaicGenerated && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold text-gray-900">Your Emoji Mosaic</h2>
-              <div className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200">
+              <div className="rounded-xl bg-gradient-to-r from-sky-50 via-emerald-50 to-violet-50 p-[1px]">
+                <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
                 <EmojiCanvasRenderer ref={canvasRef} />
+                </div>
               </div>
               <button
                 onClick={downloadMosaic}
@@ -91,6 +103,21 @@ export default function Home() {
 
           {/* SEO Content */}
           <SEOContent />
+
+          {/* Donate Section */}
+          <div className="rounded-xl bg-gradient-to-r from-pink-50 via-indigo-50 to-teal-50 p-[1px]">
+            <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900 mb-3">Support the Project</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Scan the QR to donate and help keep this tool improving.
+            </p>
+            <img
+              src="/qr.jpeg"
+              alt="Donation QR code"
+              className="mx-auto w-full max-w-xs h-auto rounded-lg ring-1 ring-gray-200"
+            />
+            </div>
+          </div>
         </div>
       </main>
 

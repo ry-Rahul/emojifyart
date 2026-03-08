@@ -30,7 +30,7 @@ export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiCont
 
   return (
     <div className="space-y-6 rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200">
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">
           Emoji Style
         </label>
@@ -50,7 +50,7 @@ export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiCont
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
       
       <div>
         <label htmlFor="export-scale" className="block text-sm font-medium text-gray-700 mb-3">
