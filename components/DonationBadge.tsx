@@ -14,14 +14,14 @@ export function DonationBadge() {
     <>
       <div className="hidden sm:flex fixed right-4 top-1/2 -translate-y-1/2 z-50 flex-col items-center gap-3">
         <a
-          href="/qr.jpeg"
+          href="/QR.jpeg"
           aria-label="Donate via QR"
           className="block"
           target="_blank"
           rel="noopener noreferrer"
         >
           <img
-            src="/qr.jpeg"
+            src="/QR.jpeg"
             alt="Donation QR code"
             className="w-40 h-40 rounded-xl ring-1 ring-gray-300 shadow-md bg-white"
           />
@@ -46,7 +46,7 @@ export function DonationBadge() {
             </DialogDescription>
           </DialogHeader>
           <img
-            src="/qr.jpeg"
+            src="/QR.jpeg"
             alt="Donation QR code"
             className="mx-auto w-[75vw] max-w-xs h-auto rounded-lg ring-1 ring-gray-200"
           />

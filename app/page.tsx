@@ -178,15 +178,15 @@ export default function Home() {
           {/* Donate Section */}
           <div className="rounded-xl bg-gradient-to-r from-pink-50 via-indigo-50 to-teal-50 p-[1px]">
             <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900 mb-3">Support the Project</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Scan the QR to donate and help keep this tool improving.
-            </p>
-            <img
-              src="/qr.jpeg"
-              alt="Donation QR code"
-              className="mx-auto w-full max-w-xs h-auto rounded-lg ring-1 ring-gray-200"
-            />
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">Support the Project</h2>
+              <p className="text-sm text-gray-600 mb-4">
+                Scan the QR to donate and help keep this tool improving.
+              </p>
+              <img
+                src="/QR.jpeg"
+                alt="Donation QR code"
+                className="mx-auto w-full max-w-xs h-auto rounded-lg ring-1 ring-gray-200"
+              />
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ export function Header() {
             </DialogDescription>
           </DialogHeader>
           <img
-            src="/qr.jpeg"
+            src="/QR.jpeg"
             alt="Donation QR code"
             className="mx-auto w-56 h-auto rounded-lg ring-1 ring-gray-200"
           />
