@@ -10,13 +10,43 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'Emoji Mosaic Generator - Transform Photos into Emoji Art',
   description: 'Create stunning emoji mosaics from your photos. Choose from multiple emoji styles (smileys, hearts, animals, mixed), adjust emoji size, and download your unique digital artwork.',
-  keywords: 'emoji mosaic, photo to emoji, emoji art generator, creative tool, digital art',
+  keywords: [
+    'emoji mosaic',
+    'photo to emoji',
+    'emoji art generator',
+    'creative tool',
+    'digital art',
+    'emojiArt',
+    'change emoji to image',
+    'emoji to image converter',
+    'emoji image generator',
+    'mosaic art tool',
+  ],
   generator: 'v0.app',
   openGraph: {
     title: 'Emoji Mosaic Generator',
     description: 'Transform your photos into beautiful emoji mosaics',
     type: 'website',
+    images: ['/placeholder.jpg'],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Emoji Mosaic Generator',
+    description: 'Transform your photos into beautiful emoji mosaics',
+    images: ['/placeholder.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  alternates: {
+    canonical: '/',
+  },
+  metadataBase: new URL('https://example.com'),
   icons: {
     icon: [
       {

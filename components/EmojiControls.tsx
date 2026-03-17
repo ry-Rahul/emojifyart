@@ -117,9 +117,13 @@ export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiCont
       <Button
         onClick={handleGenerate}
         disabled={!previewImage || isLoading}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors"
+        className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
       >
-        {isLoading ? 'Generating...' : 'Generate Mosaic'}
+        {isLoading ? (
+          <span className="text-sm font-medium">Generating mosaic...</span>
+        ) : (
+          <span>Generate Mosaic</span>
+        )}
       </Button>
     </div>
   );

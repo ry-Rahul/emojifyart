@@ -12,6 +12,7 @@ import { getCategoryEmojis, type EmojiCategory } from '@/lib/emojiMap';
 
 export interface MosaicGeneratorState {
   isLoading: boolean;
+  isDownloading: boolean;
   error: string | null;
   previewImage: string | null;
   mosaicGenerated: boolean;
@@ -20,6 +21,7 @@ export interface MosaicGeneratorState {
 export const useMosaicGenerator = () => {
   const [state, setState] = useState<MosaicGeneratorState>({
     isLoading: false,
+    isDownloading: false,
     error: null,
     previewImage: null,
     mosaicGenerated: false,
@@ -133,14 +135,23 @@ export const useMosaicGenerator = () => {
       return;
     }
 
+    setState((prev) => ({ ...prev, isDownloading: true, error: null }));
+
     try {
       downloadCanvasAsImage(canvas, 'emoji-mosaic.png');
     } catch (err) {
       setState((prev) => ({
         ...prev,
         error: err instanceof Error ? err.message : 'Failed to download mosaic',
+        isDownloading: false,
       }));
+      return;
     }
+
+    // Reset download loader after a short delay so the user can see it
+    setTimeout(() => {
+      setState((prev) => ({ ...prev, isDownloading: false }));
+    }, 500);
   }, []);
 
   return {

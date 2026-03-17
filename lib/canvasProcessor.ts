@@ -254,6 +254,32 @@ export const generateEmojiMosaic = (
       }
     }
   }
+
+  // Add watermark
+  try {
+    const watermarkText = 'emojiart.in';
+    // Keep watermark size consistent relative to final image height,
+    // not tied to emoji size.
+    const baseWatermarkSize = Math.max(14, Math.floor(canvas.height * 0.03));
+    const padding = Math.max(12, Math.floor(baseWatermarkSize * 0.6));
+
+    ctx.save();
+    ctx.font = `${baseWatermarkSize}px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+
+    // Shadow for better readability
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillText(watermarkText, canvas.width - padding + 1, canvas.height - padding + 1);
+
+    // Main text (darker, more visible)
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+    ctx.fillText(watermarkText, canvas.width - padding, canvas.height - padding);
+
+    ctx.restore();
+  } catch {
+    // Watermark should never break mosaic generation
+  }
 };
 
 /**
