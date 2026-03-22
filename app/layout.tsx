@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  metadataBase: new URL('https://example.com'),
+  metadataBase: new URL('https://emojiart.in'),
   icons: {
     icon: [
       {
