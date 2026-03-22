@@ -1,16 +1,15 @@
 'use client';
 
-import { AdBanner } from '@/components/AdBanner';
+import { useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import { EmojiCanvasRenderer } from '@/components/EmojiCanvasRenderer';
 import { EmojiControls } from '@/components/EmojiControls';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { ImageUploader } from '@/components/ImageUploader';
-import { ResultSection } from '@/components/ResultSection';
 import { SEOContent } from '@/components/SEOContent';
-import { useEffect, useRef } from 'react';
+import { Spinner } from '@/components/ui/spinner';
 import { useMosaicGenerator } from '@/hooks/useMosaicGenerator';
-import { toast } from 'sonner';
 
 export default function Home() {
   const { state, canvasRef, handleImageUpload, generateMosaic, downloadMosaic } =
@@ -18,13 +17,6 @@ export default function Home() {
   const previousGeneratedRef = useRef(false);
   const previousDownloadingRef = useRef(false);
   const previousErrorRef = useRef<string | null>(null);
-
-  // Auto-generate mosaic when image is uploaded (with default settings: very small emojis for high precision)
-  useEffect(() => {
-    if (state.previewImage && !state.mosaicGenerated && !state.isLoading) {
-      generateMosaic('colored', 4, { fitToOriginal: true, dither: true, scale: 2 });
-    }
-  }, [state.previewImage, state.mosaicGenerated, state.isLoading, generateMosaic]);
 
   useEffect(() => {
     if (state.mosaicGenerated && !previousGeneratedRef.current) {
@@ -84,56 +76,18 @@ export default function Home() {
               }),
             }}
           />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'FAQPage',
-                mainEntity: [
-                  {
-                    '@type': 'Question',
-                    name: 'How do I convert an image to emoji art?',
-                    acceptedAnswer: {
-                      '@type': 'Answer',
-                      text:
-                        'Upload your image, choose emoji size and style, enable high detail, then generate and download the mosaic.',
-                    },
-                  },
-                  {
-                    '@type': 'Question',
-                    name: 'Can I keep the original image size?',
-                    acceptedAnswer: {
-                      '@type': 'Answer',
-                      text:
-                        'Yes. Enable “Fit to original image size” to match the output dimensions to your source image.',
-                    },
-                  },
-                  {
-                    '@type': 'Question',
-                    name: 'Is the mosaic high quality for zooming?',
-                    acceptedAnswer: {
-                      '@type': 'Answer',
-                      text:
-                        'Increase Export Quality (2x–4x) to render a higher-resolution mosaic so emojis remain sharp when zoomed.',
-                    },
-                  },
-                ],
-              }),
-            }}
-          />
-          {/* Top Advertisement Banner */}
-          {/* <div className="rounded-xl bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-[1px]">
-            <div className="rounded-xl bg-white">
-              <AdBanner position="top" />
-            </div>
-          </div> */}
 
-          {/* Image Upload Section */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-gray-900">Step 1: Upload Your Image</h2>
-            <ImageUploader onImageSelected={handleImageUpload} isLoading={state.isLoading} />
-            {state.previewImage && (
+            <ImageUploader
+              onImageSelected={handleImageUpload}
+              isLoading={state.isLoading}
+              loadingStage={state.loadingStage}
+              processedWidth={state.processedWidth}
+              processedHeight={state.processedHeight}
+              wasResized={state.wasResized}
+            />
+            {state.previewImage ? (
               <div className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200">
                 <p className="text-sm text-gray-600 mb-3">Preview</p>
                 <img
@@ -142,74 +96,94 @@ export default function Home() {
                   className="max-w-full h-auto rounded mx-auto"
                 />
               </div>
-            )}
+            ) : null}
           </div>
 
-          {/* Middle Advertisement Banner */}
-          {/* {state.previewImage && (
-            <div className="rounded-xl bg-gradient-to-r from-fuchsia-50 via-sky-50 to-amber-50 p-[1px]">
-              <div className="rounded-xl bg-white">
-                <AdBanner position="middle" />
-              </div>
-            </div>
-          )} */}
-
-          {/* Emoji Controls Section */}
-          {state.previewImage && (
+          {state.previewImage ? (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold text-gray-900">Step 2: Customize & Generate</h2>
               <EmojiControls
                 onGenerate={generateMosaic}
                 isLoading={state.isLoading}
                 previewImage={state.previewImage}
+                loadingStage={state.loadingStage}
+                maxExportScale={state.maxExportScale}
               />
             </div>
-          )}
+          ) : null}
 
-          {/* Result Section */}
-          {state.mosaicGenerated && (
+          {state.mosaicGenerated || state.loadingStage === 'generating' ? (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold text-gray-900">Your Emoji Mosaic</h2>
               <div className="rounded-xl bg-gradient-to-r from-sky-50 via-emerald-50 to-violet-50 p-[1px]">
                 <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
-                  <div className="relative">
-                    <EmojiCanvasRenderer ref={canvasRef} />
-                    {state.isLoading && (
-                      <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70">
-                        <span className="text-sm font-medium text-gray-700">Generating mosaic...</span>
+                  <div className="relative min-h-[320px]">
+                    <EmojiCanvasRenderer
+                      ref={canvasRef}
+                      className={!state.mosaicGenerated ? 'min-h-[320px] w-full' : ''}
+                    />
+                    {state.loadingStage === 'generating' ? (
+                      <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/78">
+                        <div className="flex flex-col items-center gap-3 px-6 text-center">
+                          <Spinner className="h-8 w-8 text-sky-600" />
+                          <div className="space-y-1">
+                            <p className="text-base font-semibold text-gray-900">
+                              Generating your emoji mosaic...
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Heavy image analysis runs in the background while the canvas stays ready.
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
-              <button
-                onClick={downloadMosaic}
-                disabled={state.isLoading || state.isDownloading}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
-              >
-                {state.isDownloading ? (
-                  <span className="text-sm font-medium">Preparing download...</span>
-                ) : (
-                  <span>Download Mosaic</span>
-                )}
-              </button>
+
+              {state.mosaicGenerated ? (
+                <button
+                  onClick={downloadMosaic}
+                  disabled={state.isLoading || state.isDownloading}
+                  className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  {state.isDownloading ? (
+                    <span className="text-sm font-medium">Preparing download...</span>
+                  ) : (
+                    <span>Download Mosaic</span>
+                  )}
+                </button>
+              ) : null}
             </div>
-          )}
+          ) : null}
 
-          {/* Bottom Advertisement Banner */}
-          {/* {state.mosaicGenerated && <AdBanner position="bottom" />} */}
-
-          {/* Error Display */}
-          {state.error && (
+          {state.error ? (
             <div className="rounded-lg bg-red-50 p-4 ring-1 ring-red-200">
               <p className="text-sm text-red-800">{state.error}</p>
             </div>
-          )}
+          ) : null}
 
-          {/* SEO Content */}
+          <section
+            id="about"
+            className="rounded-xl bg-gradient-to-r from-amber-50 via-white to-sky-50 p-[1px]"
+          >
+            <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900">About</h2>
+              <p className="mt-3 text-sm leading-7 text-gray-700">
+                Emoji Mosaic Generator turns photos into emoji-based artwork directly in your
+                browser. It is built for fast experimentation, adjustable export quality, and
+                simple downloads without requiring any app install or account.
+              </p>
+              <p className="mt-3 text-sm leading-7 text-gray-700">
+                The goal of this website is to make creative image transformation easy for
+                students, creators, and anyone who wants to turn ordinary pictures into something
+                more playful and shareable.
+              </p>
+            </div>
+          </section>
+
           <SEOContent />
 
-          {/* Donate Section */}
           <div className="rounded-xl bg-gradient-to-r from-pink-50 via-indigo-50 to-teal-50 p-[1px]">
             <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
               <h2 className="text-xl font-semibold text-gray-900 mb-3">Support the Project</h2>
@@ -223,6 +197,26 @@ export default function Home() {
               />
             </div>
           </div>
+
+          <section
+            id="contact"
+            className="rounded-xl bg-gradient-to-r from-sky-50 via-white to-emerald-50 p-[1px]"
+          >
+            <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900">Contact</h2>
+              <p className="mt-3 text-sm leading-7 text-gray-700">
+                For feedback, collaborations, feature requests, or bugs, reach out on LinkedIn.
+              </p>
+              <a
+                href="https://www.linkedin.com/in/rahul-yadav-482156223/"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center rounded-lg bg-[#0A66C2] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#084f99]"
+              >
+                Connect on LinkedIn
+              </a>
+            </div>
+          </section>
         </div>
       </main>
 

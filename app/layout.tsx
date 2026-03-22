@@ -1,13 +1,10 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import './globals.css'
 import { DonationBadge } from '@/components/DonationBadge'
+import { Monitoring } from '@/components/Monitoring'
 import { Toaster } from '@/components/ui/sonner'
-
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: 'Emoji Mosaic Generator - Transform Photos into Emoji Art',
@@ -83,6 +80,7 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         {children}
+        <Monitoring />
         <DonationBadge />
         <Toaster />
         <Analytics />

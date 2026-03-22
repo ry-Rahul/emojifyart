@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import type { EmojiCategory } from '@/lib/emojiMap';
 
 interface EmojiControlsProps {
   onGenerate: (category: EmojiCategory, emojiSize: number, options?: { fitToOriginal?: boolean; dither?: boolean; scale?: number }) => void;
   isLoading: boolean;
   previewImage: string | null;
+  loadingStage?: 'uploading' | 'generating' | null;
+  maxExportScale: number;
 }
 
 const categories: { value: EmojiCategory; label: string }[] = [
@@ -17,12 +20,22 @@ const categories: { value: EmojiCategory; label: string }[] = [
   { value: 'mixed', label: 'Mixed' },
 ];
 
-export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiControlsProps) {
+export function EmojiControls({
+  onGenerate,
+  isLoading,
+  previewImage,
+  loadingStage,
+  maxExportScale,
+}: EmojiControlsProps) {
   const [selectedCategory, setSelectedCategory] = useState<EmojiCategory>('colored');
   const [emojiSize, setEmojiSize] = useState(4);
   const [fitToOriginal, setFitToOriginal] = useState(true);
   const [dither, setDither] = useState(true);
   const [exportScale, setExportScale] = useState(2);
+
+  useEffect(() => {
+    setExportScale((current) => Math.min(current, maxExportScale));
+  }, [maxExportScale]);
 
   const handleGenerate = () => {
     onGenerate(selectedCategory, emojiSize, { fitToOriginal, dither, scale: exportScale });
@@ -60,7 +73,7 @@ export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiCont
           id="export-scale"
           type="range"
           min="1"
-          max="4"
+          max={maxExportScale}
           step="1"
           value={exportScale}
           onChange={(e) => setExportScale(Number(e.target.value))}
@@ -69,8 +82,13 @@ export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiCont
         />
         <div className="mt-1 flex justify-between text-xs text-gray-500">
           <span>Standard (1x)</span>
-          <span>Ultra (4x)</span>
+          <span>Max allowed ({maxExportScale}x)</span>
         </div>
+        {maxExportScale < 10 ? (
+          <p className="mt-2 text-xs text-amber-700">
+            High-resolution uploads are capped to {maxExportScale}x to keep generation responsive.
+          </p>
+        ) : null}
       </div>
 
       <div>
@@ -119,8 +137,11 @@ export function EmojiControls({ onGenerate, isLoading, previewImage }: EmojiCont
         disabled={!previewImage || isLoading}
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
       >
-        {isLoading ? (
-          <span className="text-sm font-medium">Generating mosaic...</span>
+        {loadingStage === 'generating' ? (
+          <>
+            <Spinner className="h-4 w-4 text-white" />
+            <span className="text-sm font-medium">Generating mosaic...</span>
+          </>
         ) : (
           <span>Generate Mosaic</span>
         )}
