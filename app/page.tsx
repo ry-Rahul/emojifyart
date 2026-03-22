@@ -1,19 +1,23 @@
 'use client';
 
-import { useEffect } from 'react';
+import { AdBanner } from '@/components/AdBanner';
+import { EmojiCanvasRenderer } from '@/components/EmojiCanvasRenderer';
+import { EmojiControls } from '@/components/EmojiControls';
+import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { ImageUploader } from '@/components/ImageUploader';
-import { EmojiControls } from '@/components/EmojiControls';
 import { ResultSection } from '@/components/ResultSection';
-import { AdBanner } from '@/components/AdBanner';
 import { SEOContent } from '@/components/SEOContent';
-import { Footer } from '@/components/Footer';
+import { useEffect, useRef } from 'react';
 import { useMosaicGenerator } from '@/hooks/useMosaicGenerator';
-import { EmojiCanvasRenderer } from '@/components/EmojiCanvasRenderer';
+import { toast } from 'sonner';
 
 export default function Home() {
   const { state, canvasRef, handleImageUpload, generateMosaic, downloadMosaic } =
     useMosaicGenerator();
+  const previousGeneratedRef = useRef(false);
+  const previousDownloadingRef = useRef(false);
+  const previousErrorRef = useRef<string | null>(null);
 
   // Auto-generate mosaic when image is uploaded (with default settings: very small emojis for high precision)
   useEffect(() => {
@@ -21,6 +25,36 @@ export default function Home() {
       generateMosaic('colored', 4, { fitToOriginal: true, dither: true, scale: 2 });
     }
   }, [state.previewImage, state.mosaicGenerated, state.isLoading, generateMosaic]);
+
+  useEffect(() => {
+    if (state.mosaicGenerated && !previousGeneratedRef.current) {
+      toast.success('Image created', {
+        description: 'Your emoji mosaic is ready to preview and download.',
+      });
+    }
+
+    previousGeneratedRef.current = state.mosaicGenerated;
+  }, [state.mosaicGenerated]);
+
+  useEffect(() => {
+    if (state.error && state.error !== previousErrorRef.current) {
+      toast.error('Something went wrong', {
+        description: state.error,
+      });
+    }
+
+    previousErrorRef.current = state.error;
+  }, [state.error]);
+
+  useEffect(() => {
+    if (previousDownloadingRef.current && !state.isDownloading && !state.error) {
+      toast.success('Download started', {
+        description: 'Your emoji mosaic is being downloaded.',
+      });
+    }
+
+    previousDownloadingRef.current = state.isDownloading;
+  }, [state.isDownloading, state.error]);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -89,11 +123,11 @@ export default function Home() {
             }}
           />
           {/* Top Advertisement Banner */}
-          <div className="rounded-xl bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-[1px]">
+          {/* <div className="rounded-xl bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-[1px]">
             <div className="rounded-xl bg-white">
               <AdBanner position="top" />
             </div>
-          </div>
+          </div> */}
 
           {/* Image Upload Section */}
           <div className="space-y-4">
@@ -112,13 +146,13 @@ export default function Home() {
           </div>
 
           {/* Middle Advertisement Banner */}
-          {state.previewImage && (
+          {/* {state.previewImage && (
             <div className="rounded-xl bg-gradient-to-r from-fuchsia-50 via-sky-50 to-amber-50 p-[1px]">
               <div className="rounded-xl bg-white">
                 <AdBanner position="middle" />
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Emoji Controls Section */}
           {state.previewImage && (
@@ -163,7 +197,7 @@ export default function Home() {
           )}
 
           {/* Bottom Advertisement Banner */}
-          {state.mosaicGenerated && <AdBanner position="bottom" />}
+          {/* {state.mosaicGenerated && <AdBanner position="bottom" />} */}
 
           {/* Error Display */}
           {state.error && (
