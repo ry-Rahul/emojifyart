@@ -1,5 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
+import Link from 'next/link';
+
 export function Header() {
   return (
     <header className="relative w-full border-b border-gray-200 bg-white">
@@ -22,11 +24,29 @@ export function Header() {
         </DialogContent>
       </Dialog>
       <div className="mx-auto max-w-2xl px-4 py-8 text-center sm:px-6 lg:px-8">
+        <nav className="mb-5 flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600">
+          <Link href="#about" className="transition-colors hover:text-gray-900">
+            About
+          </Link>
+          <Link href="#contact" className="transition-colors hover:text-gray-900">
+            Contact
+          </Link>
+          <Link href="/privacy" className="transition-colors hover:text-gray-900">
+            Privacy
+          </Link>
+          <Link href="/terms" className="transition-colors hover:text-gray-900">
+            Terms
+          </Link>
+        </nav>
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600">
           Emoji Mosaic Generator
         </h1>
         <p className="mt-4 text-lg text-gray-700">
           Transform your photos into beautiful emoji mosaics
+        </p>
+        <p className="mt-3 text-sm text-gray-600">
+          Photos are processed in your browser, and the site includes guides, privacy details, and
+          contact information to help you use the tool confidently.
         </p>
       </div>
     </header>

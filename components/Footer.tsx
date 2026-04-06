@@ -17,9 +17,14 @@ export function Footer() {
               This tool helps students, creators, and casual users turn images into playful
               emoji-based artwork with adjustable quality and easy downloads.
             </p>
-            <a href="#about" className="mt-3 inline-block hover:text-gray-900 transition-colors">
-              Read more
-            </a>
+            <div className="mt-3 flex flex-col gap-2">
+              <a href="#about" className="hover:text-gray-900 transition-colors">
+                Read more
+              </a>
+              <a href="/terms" className="hover:text-gray-900 transition-colors">
+                Terms of use
+              </a>
+            </div>
           </div>
 
           <div>
@@ -36,6 +41,11 @@ export function Footer() {
             <div className="mt-2">
               <a href="#contact" className="hover:text-gray-900 transition-colors">
                 Contact section
+              </a>
+            </div>
+            <div className="mt-2">
+              <a href="/privacy" className="hover:text-gray-900 transition-colors">
+                Privacy policy
               </a>
             </div>
           </div>

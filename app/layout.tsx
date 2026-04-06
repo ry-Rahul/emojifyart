@@ -1,7 +1,8 @@
-import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+
+import { Analytics } from '@vercel/analytics/next'
 import { DonationBadge } from '@/components/DonationBadge'
+import type { Metadata } from 'next'
 import { Monitoring } from '@/components/Monitoring'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -71,13 +72,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
+      {/* <head>
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8671097433271995"
           crossOrigin="anonymous"
         />
-      </head>
+      </head> */}
       <body className="font-sans antialiased" suppressHydrationWarning>
         {children}
         <Monitoring />
