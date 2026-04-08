@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   metadataBase: new URL('https://emojiart.in'),
+  other: {
+    'google-adsense-account': 'ca-pub-8671097433271995',
+  },
   icons: {
     icon: [
       {
@@ -72,13 +75,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <head>
+      <head>
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8671097433271995"
           crossOrigin="anonymous"
         />
-      </head> */}
+      </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
         {children}
         <Monitoring />
