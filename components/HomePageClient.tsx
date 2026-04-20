@@ -11,7 +11,7 @@ import { SEOContent } from '@/components/SEOContent';
 import { Spinner } from '@/components/ui/spinner';
 import { useMosaicGenerator } from '@/hooks/useMosaicGenerator';
 
-export default function Home() {
+export function HomePageClient() {
   const { state, canvasRef, handleImageUpload, generateMosaic, downloadMosaic } =
     useMosaicGenerator();
   const previousGeneratedRef = useRef(false);
@@ -61,7 +61,7 @@ export default function Home() {
                 '@context': 'https://schema.org',
                 '@type': 'WebApplication',
                 name: 'Emoji Mosaic Generator',
-                url: 'https://example.com/',
+                url: 'https://www.emojiart.in/',
                 applicationCategory: 'Multimedia',
                 operatingSystem: 'Web',
                 description:
