@@ -8,14 +8,11 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { ImageUploader } from '@/components/ImageUploader';
 import { AdSenseFluidUnit } from '@/components/AdSenseFluidUnit';
-import { AdSenseSidebarUnit } from '@/components/AdSenseSidebarUnit';
 import { SEOContent } from '@/components/SEOContent';
 import { Spinner } from '@/components/ui/spinner';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useMosaicGenerator } from '@/hooks/useMosaicGenerator';
 
 export function HomePageClient() {
-  const showSidebars = useMediaQuery('(min-width: 1536px)');
   const { state, canvasRef, handleImageUpload, generateMosaic, downloadMosaic } =
     useMosaicGenerator();
   const previousGeneratedRef = useRef(false);
@@ -56,18 +53,8 @@ export function HomePageClient() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
 
-      <div className="flex flex-1 w-full max-w-[1600px] mx-auto justify-center gap-6 lg:gap-8 px-4 py-8 sm:px-6 lg:px-8">
-        {showSidebars ? (
-          <aside
-            className="w-[300px] shrink-0 self-start sticky top-24"
-            aria-label="Advertisement"
-          >
-            <AdSenseSidebarUnit />
-          </aside>
-        ) : null}
-
-        <main className="flex-1 w-full min-w-0 max-w-2xl">
-          <div className="space-y-8">
+      <main className="flex-1 w-full mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="space-y-8">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -233,18 +220,8 @@ export function HomePageClient() {
               </a>
             </div>
           </section>
-          </div>
-        </main>
-
-        {showSidebars ? (
-          <aside
-            className="w-[300px] shrink-0 self-start sticky top-24"
-            aria-label="Advertisement"
-          >
-            <AdSenseSidebarUnit />
-          </aside>
-        ) : null}
-      </div>
+        </div>
+      </main>
 
       <Footer />
     </div>
