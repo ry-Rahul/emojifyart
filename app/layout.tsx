@@ -46,9 +46,6 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   metadataBase: new URL('https://www.emojiart.in'),
-  other: {
-    'google-adsense-account': 'ca-pub-8671097433271995',
-  },
   icons: {
     icon: [
       {

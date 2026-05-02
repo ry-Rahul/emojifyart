@@ -78,7 +78,11 @@ export function HomePageClient() {
             }}
           />
 
-          <AdSenseFluidUnit />
+          <div className="rounded-xl bg-gradient-to-r from-slate-100 via-white to-slate-100 p-[1px]">
+            <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
+              <AdSenseFluidUnit />
+            </div>
+          </div>
 
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-gray-900">Step 1: Upload Your Image</h2>
